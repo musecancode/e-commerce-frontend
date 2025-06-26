@@ -1,79 +1,53 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // ✅ Import Link
+import { useState } from "react";
+import { useProducts } from "./ProductContext";
 import Hero from "./Hero";
 import CategoryLinks from "./CategoryLinks";
 import ProductCard from "./ProductCard";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+  const { products } = useProducts();
+  const [visibleCount, setVisibleCount] = useState(8);
+  const itemsPerRow = 4;
+  const rowsPerClick = 2;
 
-  // Fetch featured products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/products?limit=100");
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Error fetching featured products:", error);
-      }
-    };
+  const visibleProducts = products.slice(0, visibleCount);
 
-    fetchProducts();
-  }, []);
-
-  // Handle search submit
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (query.trim() !== "") {
-      navigate(`/search?q=${encodeURIComponent(query)}`);
-    }
+  const handleViewMore = () => {
+    setVisibleCount((prev) => prev + itemsPerRow * rowsPerClick);
   };
+
+  const allShown = visibleCount >= products.length;
 
   return (
     <div className="space-y-10">
-      {/* 🔍 Search Bar */}
-      <form onSubmit={handleSearch} className="px-6 pt-4 flex gap-2">
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="border rounded px-4 py-2 w-full"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Search
-        </button>
-
-        {/* 🛒 View Cart Button */}
-        <Link
-          to="/cart"
-          className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
-        >
-          🛒 View Cart
-        </Link>
-      </form>
-
-      {/* 🖼️ Hero Section */}
       <Hero />
 
-      {/* 🗂️ Category Links */}
-      <CategoryLinks />
-
-      {/* 🌟 Featured Products */}
-      <section className="px-6">
-        <h2 className="text-2xl font-semibold mb-4">Featured Products</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
+      <section
+        id="featured-products"
+        className="px-6 bg-[#faf3ee] pb-20 pt-20 mt-24 mb-24 rounded-md shadow-sm"
+      >
+        <h2 className="text-6xl font-light font-serif text-primary mb-20">
+          Featured Products
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-0">
+          {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+
+        {!allShown && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={handleViewMore}
+              className="border border-black text-black px-6 py-2 hover:bg-[#c97a40]/80 hover:text-white transition-all duration-300"
+            >
+              VIEW MORE PRODUCTS
+            </button>
+          </div>
+        )}
       </section>
+
+      <CategoryLinks />
     </div>
   );
 };
