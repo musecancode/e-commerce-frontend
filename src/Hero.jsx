@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
@@ -27,7 +28,7 @@ const slides = [
     image:
       "https://wallpapers.com/images/hd/aesthetic-computer-pictures-zagqv8hl2wtfftni.jpg",
     title: "Laptops & Tech accessories",
-    subtitle: "SEssential accessories for your digital lifestyle.",
+    subtitle: "Essential accessories for your digital lifestyle.",
   },
 ];
 
@@ -35,42 +36,68 @@ const Hero = () => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 4000);
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="relative w-full h-screen -mt-24 overflow-hidden">
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          <img
-            src={slide.image}
-            alt={slide.title}
-            className="w-full h-full object-cover"
-          />
+    <div className="relative w-[99%] h-[400px] md:h-[500px] bg-white overflow-hidden mt-8 mx-2 rounded-2xl">
+      {/* Background Image */}
+      <div
+        className="absolute top-0 left-0 w-full h-full z-0"
+        style={{
+          backgroundImage:
+            "url('https://baggo-theme.myshopify.com/cdn/shop/files/footer-image.jpg?v=1639566032')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></div>
 
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white px-6">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              {slide.title}
-            </h1>
-            <p className="text-lg md:text-xl mb-6">{slide.subtitle}</p>
-            <a
-              href="#featured-products"
-              className="bg-primary text-white px-6 py-3 rounded-full hover:bg-[#c97a40]/60 transition"
-            >
-              Shop Now
-            </a>
-          </div>
-        </div>
-      ))}
-    </section>
+      {/* Slide Content */}
+      <AnimatePresence mode="sync">
+        {slides.map(
+          (slide, index) =>
+            index === current && (
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 1.8 }}
+                className="absolute top-0 left-0 w-full h-full flex z-10"
+              >
+                {/* Left text section */}
+                <div className="w-1/2 flex flex-col justify-center items-center p-6 text-white text-center space-y-4">
+                  <h1 className="text-3xl md:text-5xl font-semibold drop-shadow-md">
+                    {slide.title}
+                  </h1>
+                  <p className="text-lg md:text-xl font-light drop-shadow-sm">
+                    {slide.subtitle}
+                  </p>
+                </div>
+
+                {/* Right image section */}
+                <div className="w-1/2 h-full">
+                  <img
+                    src={slide.image}
+                    alt="slide-img"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </motion.div>
+            )
+        )}
+      </AnimatePresence>
+
+      {/* Fixed Shop Now Button */}
+      <a href="#featured-products" className="absolute bottom-6 left-6 z-20">
+        <button className="px-6 py-3 bg-black text-white rounded-full shadow-lg hover:bg-yellow-400 transition duration-300">
+          Shop Now
+        </button>
+      </a>
+    </div>
   );
 };
 

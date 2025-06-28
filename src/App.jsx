@@ -8,6 +8,8 @@ import CartPage from "./CartPage";
 import CheckoutPage from "./CheckoutPage";
 import OrderConfirmation from "./OrderConfirmation";
 import Footer from "./Footer";
+import Login from "./Login";
+import Signup from "./Signup";
 function App() {
   return (
     <>
@@ -22,6 +24,8 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
           <Footer />
         </Router>

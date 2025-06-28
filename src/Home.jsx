@@ -19,7 +19,7 @@ const Home = () => {
   const allShown = visibleCount >= products.length;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 relative">
       <Hero />
 
       <section

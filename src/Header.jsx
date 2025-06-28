@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext";
 import CartIcon from "./CartIcon";
 
+import { FiLogIn } from "react-icons/fi";
+
 const Header = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
@@ -62,6 +64,14 @@ const Header = () => {
 
         {/* Cart */}
         <div className="flex items-center gap-4 pl-4 pr-2 min-w-[80px] justify-end h-full">
+          {/* Login Icon (top right corner) */}
+          <Link
+            to="/login"
+            className="w-8 h-8 text-3xl text-white hover:text-[#c97a40] transition duration-300"
+            title="Login"
+          >
+            <FiLogIn />
+          </Link>
           <Link to="/cart" className="relative group" title="Cart">
             <CartIcon className="w-9 h-9 text-white group-hover:text-yellow-400 transition-colors duration-300" />
             {cart.length > 0 && (

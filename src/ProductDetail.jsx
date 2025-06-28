@@ -49,6 +49,7 @@ const ProductDetail = () => {
           src={product.thumbnail}
           alt={product.title}
           className="rounded-lg w-full object-cover bg-[#faf3ee]"
+          loading="lazy"
         />
 
         {/* Info Section */}
